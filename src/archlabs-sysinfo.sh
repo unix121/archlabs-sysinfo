@@ -17,6 +17,7 @@ printf -v color3 %b "\e[33m"
 printf -v color4 %b "\e[34m"
 printf -v color5 %b "\e[35m"
 printf -v color6 %b "\e[36m"
+printf -v color7 %b "\e[37m"
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -26,14 +27,16 @@ case "$SHELL" in
   "/usr/bin/bash" | "/bin/bash") USING=$(bash --version | grep "GNU bash, version" | awk {'print $4'}) ;;
 esac
 
-UPTIME=$(uptime | awk -F'( |,|:)+' '{print $8,"hours, " $7" minutes"}')
+OS='ArchLabs Linux'
+UPTIME=$(uptime -p | sed 's/up //')
+
 
 echo
-echo $color1 "      /\      " ${bold}User:${normal} $(whoami)
-echo $color2 "     /^^\     " ${bold}OS:${normal} $(head -n1 /etc/issue | cut -f 1 -d ' ')
-echo $color3 "    / /\ \    " ${bold}Kernel:${normal} $(uname -r)
-echo $color4 "   / //\\\ \   " ${bold}Shell:${normal} $USING
-echo $color5 "  / //  \\\ \  " ${bold}Uptime:${normal} $UPTIME
-echo $color6 " / _\\\()//_ \ " ${bold}Terminal:${normal} $TERM
-echo $color6 "///    /   \\\\\\" ${normal}
+echo $color1 "      /\      " $color3 User:${normal} "   " $(whoami)
+echo $color2 "     /^^\     " $color3 OS:${normal} "     " $OS
+echo $color3 "    / /\ \    " $color3 Kernel:${normal} " " $(uname -r)
+echo $color4 "   / //\\\ \   " $color3 Shell:${normal} "  " $USING
+echo $color5 "  / //  \\\ \  " $color3 Uptime:${normal} " " $UPTIME
+echo $color6 " / _\\\()//_ \ " $color3 Terminal:${normal} $TERM
+echo ${bold}$color0 "///    /   \\\\\\" ${normal}$color3 Packages:${normal} $(pacman -Q | wc -l)
 echo
